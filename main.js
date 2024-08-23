@@ -85,7 +85,6 @@ fs.watchFile("./video/response.mp4", { interval: 1000 }, (curr, prev) => {
   if (curr.mtime !== prev.mtime) {
     console.log("Video file changed, reprocessing...");
     processVideo();
-    console.log("Video Ready");
   }
 });
 
@@ -95,3 +94,4 @@ initDefaultVideo();
 server.get("/process-video", (req, res) => {
   processVideo(res);
 });
+console.log("Video Ready");

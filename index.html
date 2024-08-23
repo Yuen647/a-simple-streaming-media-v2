@@ -4,30 +4,122 @@
 <head>
     <title>Video Server</title>
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <style>
+        /* 聊天输入框样式 */
+        #chat-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background-color: hsl(203, 57%, 75%);
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #chat-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        #voice-button, #send-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s;
+        }
+
+        #voice-button {
+            background-color: #6c757d;
+            color: white;
+            margin-right: 10px;
+        }
+
+        #voice-button:hover {
+            background-color: #5a6268;
+        }
+
+        #send-button {
+            background-color: #50a0f1;
+            color: white;
+        }
+
+        #send-button:hover {
+            background-color: #1189c0;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: hsl(203, 57%, 75%);
+          }
+      
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+    </style>
 </head>
 <body>
     <div>
         <div id="response"></div>
     </div>
 
+    <div id="particles-js"></div>
+
     <hr />
 
-    <div>
-        <h2>播放视频</h2>
+    <div style="display: flex; justify-content: center; align-items: flex-start; height: 100vh; padding-top: 50px; background:  hsl(203, 57%, 75%);;">
         <video
             id="my-video"
             class="video-js"
             controls
             preload="auto"
-            width="640"
-            height="360"
+            width="800"
+            height="450"
             autoplay
             data-setup="{}"
+            style="box-shadow: 0 4px 8px  hsl(203, 57%, 75%);; border: 1px solid  hsl(203, 57%, 75%);; border-radius: 10px;"
         >
             <source src="./storage/default/video.m3u8" type="application/x-mpegURL" />
         </video>
     </div>
 
+    <!-- 聊天输入框与语音、发送按钮 -->
+    <div id="chat-container">
+        <input type="text" id="chat-input" placeholder="请输入..." />
+        <button id="voice-button">🎤</button>
+        <button id="send-button">发送</button>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
         const videoPlayer = videojs("my-video");
@@ -75,10 +167,126 @@
         // 页面加载时手动触发一次播放默认视频
         playVideo("./storage/default/video.m3u8", true); // 设置为默认视频
 
-        // 定期检查视频文件更新，每隔 5 秒检查一次
+        // 定期检查视频文件更新，每隔 1 秒检查一次
         setInterval(checkForUpdatedVideo, 1000);
 
+        particlesJS('particles-js',
+        {
+          "particles": {
+            "number": {
+              "value": 80,
+              "density": {
+                "enable": true,
+                "value_area": 800
+              }
+            },
+            "color": {
+              "value": "#ffffff"
+            },
+            "shape": {
+              "type": "circle",
+              "stroke": {
+                "width": 0,
+                "color": "#000000"
+              },
+              "polygon": {
+                "nb_sides": 5
+              },
+  
+            },
+            "opacity": {
+              "value": 0.5,
+              "random": false,
+              "anim": {
+                "enable": false,
+                "speed": 1,
+                "opacity_min": 0.1,
+                "sync": false
+              }
+            },
+            "size": {
+              "value": 5,
+              "random": true,
+              "anim": {
+                "enable": false,
+                "speed": 40,
+                "size_min": 0.1,
+                "sync": false
+              }
+            },
+            "line_linked": {
+              "enable": true,
+              "distance": 150,
+              "color": "#ffffff",
+              "opacity": 0.4,
+              "width": 1
+            },
+            "move": {
+              "enable": true,
+              "speed": 6,
+              "direction": "none",
+              "random": false,
+              "straight": false,
+              "out_mode": "out",
+              "attract": {
+                "enable": false,
+                "rotateX": 600,
+                "rotateY": 1200
+              }
+            }
+          },
+          "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+              "onhover": {
+                "enable": true,
+                "mode": "repulse"
+              },
+              "onclick": {
+                "enable": true,
+                "mode": "push"
+              },
+              "resize": true
+            },
+            "modes": {
+              "grab": {
+                "distance": 400,
+                "line_linked": {
+                  "opacity": 1
+                }
+              },
+              "bubble": {
+                "distance": 400,
+                "size": 40,
+                "duration": 2,
+                "opacity": 8,
+                "speed": 3
+              },
+              "repulse": {
+                "distance": 200
+              },
+              "push": {
+                "particles_nb": 4
+              },
+              "remove": {
+                "particles_nb": 2
+              }
+            }
+          },
+          "retina_detect": true,
+          "config_demo": {
+            "hide_card": false,
+            "background_color": "#b61924",
+            "background_image": "",
+            "background_position": "50% 50%",
+            "background_repeat": "no-repeat",
+            "background_size": "cover"
+          }
+        }
+  
+      );
     </script>
 </body>
 </html>
+
 
